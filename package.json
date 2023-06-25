@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username-or-org/n8n-nodes-maytapi.git"
+    "url": "https://github.com/realmchua/n8n-nodes-maytapi.git"
   },
   "main": "index.js",
   "scripts": {
