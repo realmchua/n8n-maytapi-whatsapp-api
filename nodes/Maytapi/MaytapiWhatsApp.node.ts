@@ -20,14 +20,13 @@ export class MaytapiWhatsAppNode implements INodeType {
     },
     inputs: ['main'],
     outputs: ['main'],
-    properties: [
+    credentials: [
       {
-        displayName: 'API Key',
-        name: 'apiKey',
-        type: 'string',
-        default: '',
+        name: 'maytapiApi',
         required: true,
       },
+    ],
+    properties: [
       {
         displayName: 'Phone Number',
         name: 'phoneNumber',
@@ -48,20 +47,24 @@ export class MaytapiWhatsAppNode implements INodeType {
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
     const items = this.getInputData();
 
-    let item: INodeExecutionData;
-    let apiKey: string;
+    let credentials;
     let phoneNumber: string;
     let message: string;
 
-    try {
-      apiKey = this.getNodeParameter('apiKey') as string;
-      phoneNumber = this.getNodeParameter('phoneNumber') as string;
-      message = this.getNodeParameter('message') as string;
-    } catch (error) {
-      throw new NodeOperationError(this.getNode(), error);
-    }
-
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
+      let item: INodeExecutionData;
+
+      try {
+        credentials = await this.getCredentials('maytapiApi');
+        if (!credentials || !credentials.apiKey) {
+          throw new Error('Missing Maytapi API credentials!');
+        }
+        phoneNumber = this.getNodeParameter('phoneNumber', itemIndex) as string;
+        message = this.getNodeParameter('message', itemIndex) as string;
+      } catch (error) {
+        throw new NodeOperationError(this.getNode(), error);
+      }
+
       try {
         item = items[itemIndex];
 
@@ -77,7 +80,7 @@ export class MaytapiWhatsAppNode implements INodeType {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-maytapi-key': apiKey,
+            'x-maytapi-key': credentials.apiKey as string,
           },
         };
 

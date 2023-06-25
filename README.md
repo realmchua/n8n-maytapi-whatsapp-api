@@ -1,6 +1,6 @@
 # n8n-nodes-MaytapiWhatsApp
 
-This is an n8n community node. It lets you use Maytapi WhatsApp in your n8n workflows.
+g
 
 Maytapi WhatsApp is a service that provides WhatsApp integration for business workflows. It allows you to send and receive WhatsApp messages programmatically.
 
