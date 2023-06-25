@@ -57,12 +57,12 @@ export class MaytapiWhatsAppNode implements INodeType {
       try {
         credentials = await this.getCredentials('maytapiApi');
         if (!credentials || !credentials.apiKey) {
-          throw new Error('Missing Maytapi API credentials!');
+          throw new NodeOperationError(this.getNode(), 'Missing Maytapi API credentials!');
         }
         phoneNumber = this.getNodeParameter('phoneNumber', itemIndex) as string;
         message = this.getNodeParameter('message', itemIndex) as string;
       } catch (error) {
-        throw new NodeOperationError(this.getNode(), error);
+        throw new NodeOperationError(this.getNode(), 'Error occurred: ' + error);
       }
 
       try {
@@ -116,7 +116,7 @@ export class MaytapiWhatsAppNode implements INodeType {
             error.context.itemIndex = itemIndex;
             throw error;
           }
-          throw new NodeOperationError(this.getNode(), error, {
+          throw new NodeOperationError(this.getNode(), 'Error occurred: ' + error, {
             itemIndex,
           });
         }
